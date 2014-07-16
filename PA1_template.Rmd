@@ -2,7 +2,9 @@
 title: "Peer Assessment 1"
 author: "Jurijs Jefimovs"
 date: "Tuesday, July 15, 2014"
-output: html_document
+output:
+  html_document:
+    keep_md: yes
 ---
 ```{r LOAD_LIBRARIES }
 require(ggplot2)
@@ -89,7 +91,7 @@ Answer 2:       It is obvios that after imputing data, totals has increased wher
 
 * NOTE: weekday() function prints weekdays using local regional settings. (for instance if you have russian locale, you will get russians weekday names).Instead i use format() with "format" = %u (Weekday as a decimal number 1–7, Monday is 1)
 
-```{r }
+```{r AddingWeekdayColumn}
 data$weekday <- format(data$dt, format = "%u") #see *NOTE above
 data$weekday_name[data$weekday < 6] <- "weekday"
 data$weekday_name[data$weekday >= 6] <- "weekend"
@@ -97,7 +99,7 @@ data$weekday_name[data$weekday >= 6] <- "weekend"
 
 2. Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
 
-```{r }
+```{r TimeSeriesPlotbyWeekday}
 tseries_by_weekday_interval <- aggregate(steps ~ interval + weekday_name, data, FUN = mean)
 qplot(interval, steps, data=tseries_by_weekday_interval, geom="line",facets = weekday_name~. )
 

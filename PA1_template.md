@@ -172,4 +172,4 @@ tseries_by_weekday_interval <- aggregate(steps ~ interval + weekday_name, data, 
 qplot(interval, steps, data=tseries_by_weekday_interval, geom="line",facets = weekday_name~. )
 ```
 
-![plot of chunk unnamed-chunk-2](./PA1_template_files/figure-html/unnamed-chunk-2.png) 
+![plot of chunk TimeSeriesPlotbyWeekday](./PA1_template_files/figure-html/TimeSeriesPlotbyWeekday.png) 
