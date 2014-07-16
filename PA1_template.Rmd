@@ -15,6 +15,7 @@ unzip("activity.zip")
 data <- read.csv("activity.csv")
 str(data)
 ```
+
 2. Data transformation. Converting date column from factor to Date type.
 ```{r DataTransformation}
 data$dt <- as.Date(data$date, format="%Y-%m-%d")
@@ -27,6 +28,7 @@ str(data)
 hist_data <- aggregate(steps ~ date, data, FUN = sum)
 hist(hist_data$steps, main = "Histogram of the total number of steps taken each day", xlab = "Steps")
 ```
+
 2. The mean and median total number of steps taken per day
 ```{r MeanAndMedian}
 summary(hist_data$steps)
@@ -46,21 +48,26 @@ tseries_by_interval$interval[tseries_by_interval$steps == max(tseries_by_interva
 ```
 
 ###Imputing missing values
+
 1. The total number of missing values in the dataset (i.e. the total number of rows with NAs)
 ```{r TotalNumberOfNa}
 sum(is.na(data$steps))
 ```
+
 2. Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
+
 Answer: The strategy for filling missing values is to use median for 5-minute interval across all days.
 ```{r MissingValuesStrategy}
 median_by_interval <- aggregate(steps ~ interval, data, FUN = median)
 ```
+
 3. Create a new dataset that is equal to the original dataset but with the missing data filled in.
 ```{r NewDataSet}
 rownames(median_by_interval) <- median_by_interval$interval
 na_steps <- data$interval[is.na(data$steps)]
 data$steps[is.na(data$steps)] <- median_by_interval[as.character(na_steps),"steps"]
 ```
+
 4. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day.
 ```{r HistogramAfterFillingNaValues}
 hist_data <- aggregate(steps ~ date, data, FUN = sum)
@@ -70,10 +77,12 @@ summary(hist_data$steps)
 summary(hist_data$steps)[c("Mean","Median")]
 
 ```
+
 Question 1:     Do these values differ from the estimates from the first part of the assignment?
 Answer 1:       Yes, they do. After filling missing values, Mean and Median is shifted to the left.
+
 Question 2:     What is the impact of imputing missing data on the estimates of the total daily number of steps?
-Answer 2:       It is obvios that after imputing data, totals has increased.
+Answer 2:       It is obvios that after imputing data, totals has increased where data was imputed.
 
 ###Are there differences in activity patterns between weekdays and weekends?
 1. Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
@@ -86,7 +95,7 @@ data$weekday_name[data$weekday < 6] <- "weekday"
 data$weekday_name[data$weekday >= 6] <- "weekend"
 ```
 
-2. Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). The plot should look something like the following, which was creating using simulated data:
+2. Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
 
 ```{r }
 tseries_by_weekday_interval <- aggregate(steps ~ interval + weekday_name, data, FUN = mean)
